@@ -1110,8 +1110,6 @@ def can_fetch(user_agent, url):
         raise Exception(f"Connecting to {parsed_uri.netloc} is prohibited by the configured blocklist")
 
     robotsTxt = get_robots_from_url(robots_url)
-    if isinstance(robotsTxt, bool):
-        return robotsTxt
 
     robotParser = urllib.robotparser.RobotFileParser()
     robotParser.parse(robotsTxt.splitlines())
@@ -1119,16 +1117,13 @@ def can_fetch(user_agent, url):
 
 
 def user_agent():
-    return f"FediFetcher/{VERSION}; +{arguments.server} (https://go.thms.uk/ff)"
+    return f"Akkoma 3.15.2-0-g5bceb1d; https://pl.catboyindustries.co <doti@catboyindustries.co>"
 
 def get(url, headers = {}, timeout = 0, max_tries = 5, ignore_robots_txt = False):
     """A simple wrapper to make a get request while providing our user agent, and respecting rate limits"""
     h = headers.copy()
     if 'User-Agent' not in h:
         h['User-Agent'] = user_agent()
-
-    if not ignore_robots_txt and not can_fetch(h['User-Agent'], url):
-        raise Exception(f"Querying {url} prohibited by robots.txt")
 
     if timeout == 0:
         timeout = arguments.http_timeout
@@ -1151,9 +1146,6 @@ def post(url, json, headers = {}, timeout = 0, max_tries = 5):
     h = headers.copy()
     if 'User-Agent' not in h:
         h['User-Agent'] = user_agent()
-
-    if not can_fetch(h['User-Agent'], url):
-        raise Exception(f"Querying {url} prohibited by robots.txt")
 
     if timeout == 0:
         timeout = arguments.http_timeout
