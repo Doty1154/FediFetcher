@@ -21,6 +21,7 @@ logger = logging.getLogger("FediFetcher")
 robotParser = urllib.robotparser.RobotFileParser()
 
 VERSION = "7.1.16"
+ignore_robots_txt = "True"
 
 argparser=argparse.ArgumentParser()
 
